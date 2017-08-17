@@ -16,9 +16,7 @@ class UsersRegister(View):
 
     def post(self, request):
         if registerUser(request)['registered']:
-            print 'user registered'
             login(request)
-            print 'user logged in'
             return redirect(reverse('dashboard-index'))
         return redirect(reverse('users-register'))
 
