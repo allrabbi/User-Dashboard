@@ -12,7 +12,8 @@ class UserManager(models.Manager):
 
     adminCreated = False
 
-    def validate_registration(self, postData, forProfileUpdate=True, forPasswordUpdate=True, forDescriptionUpdate=False, ignoreDupeEmail=False, forLevelUpdate=False):
+    #validates the POST data before updating or creating a user. Takes a number of parameters that allow branching during validation depending on the needs of the caller (granted it would be better to just create a form)
+    def validate(self, postData, forProfileUpdate=True, forPasswordUpdate=True, forDescriptionUpdate=False, ignoreDupeEmail=False, forLevelUpdate=False):
         errors = {}
         #validate keys
         if forProfileUpdate and not all(k in postData.keys() for k in ['first_name', 'last_name', 'email']):

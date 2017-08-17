@@ -32,7 +32,7 @@ def registerUser(request, byAdmin=False):
         'registered': False,
         'user_id': -1,
     }
-    if not checkAndDisplayErrors(request, User.objects.validate_registration, 'registration'):
+    if not checkAndDisplayErrors(request, User.objects.validate, 'registration'):
         user = User.objects.create(request.POST)
         result['registered'] = True
         result['user_id'] = user.id
@@ -84,7 +84,7 @@ def admin_required(func):
 #lets an admin update a user's profile. Passes parameters to the validation method that specify what the validator should look for in the POST request
 def adminUpdateProfile(request, user_id):
     options = {'forProfileUpdate': True, 'forPasswordUpdate': False, 'forDescriptionUpdate': False, 'forLevelUpdate': True, 'ignoreDupeEmail': True}
-    if not checkAndDisplayErrors(request, User.objects.validate_registration, 'profile-update', **options):
+    if not checkAndDisplayErrors(request, User.objects.validate, 'profile-update', **options):
         user = User.objects.get(id=user_id)
         user.updateProfile(request.POST)
         user.updateLevel(request.POST)
@@ -93,28 +93,28 @@ def adminUpdateProfile(request, user_id):
 #lets an admin update a user's profile. Passes parameters to the validation method that specify what the validator should look for in the POST request
 def adminUpdatePassword(request, user_id):
     options = {'forProfileUpdate': False, 'forPasswordUpdate': True, 'forDescriptionUpdate': False}
-    if not checkAndDisplayErrors(request, User.objects.validate_registration, 'password-update', **options):
+    if not checkAndDisplayErrors(request, User.objects.validate, 'password-update', **options):
         User.objects.get(id=user_id).updatePassword(request.POST)
         flashMessages(request, ['Successfully updated user'], 'notification')
 
 #lets a user update their profile. Passes parameters to the validation method that specify what the validator should look for in the POST request
 def userUpdateProfile(request):
     options = {'forProfileUpdate': True, 'forPasswordUpdate': False, 'forDescriptionUpdate': False, 'ignoreDupeEmail': True}
-    if not checkAndDisplayErrors(request, User.objects.validate_registration, 'profile-update', **options):
+    if not checkAndDisplayErrors(request, User.objects.validate, 'profile-update', **options):
         User.objects.get(id=request.session['user_id']).updateProfile(request.POST)
         flashMessages(request, ['Successfully updated profile'], 'notification')
 
 #lets a user update their profile. Passes parameters to the validation method that specify what the validator should look for in the POST request
 def userUpdateDescription(request):
     options = {'forProfileUpdate': False, 'forPasswordUpdate': False, 'forDescriptionUpdate': True}
-    if not checkAndDisplayErrors(request, User.objects.validate_registration, 'description-update', **options):
+    if not checkAndDisplayErrors(request, User.objects.validate, 'description-update', **options):
         User.objects.get(id=request.session['user_id']).updateDescription(request.POST)
         flashMessages(request, ['Successfully updated description'], 'notification')
 
 #lets a user update their profile. Passes parameters to the validation method that specify what the validator should look for in the POST request
 def userUpdatePassword(request):
     options = {'forProfileUpdate': False, 'forPasswordUpdate': True, 'forDescriptionUpdate': False}
-    if not checkAndDisplayErrors(request, User.objects.validate_registration, 'password-update', **options):
+    if not checkAndDisplayErrors(request, User.objects.validate, 'password-update', **options):
         User.objects.get(id=request.session['user_id']).updatePassword(request.POST)
         flashMessages(request, ['Successfully updated password'], 'notification')
 
