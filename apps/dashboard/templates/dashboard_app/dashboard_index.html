@@ -82,7 +82,7 @@
                             <td>{{user.created_at | localtime}}</td>
                             <td>{%if user.user_level == 9%}Admin{% else %}Regular{% endif %}</td>
                             {% if admin and user.id != request.session.user_id %}
-                            <td><a href="{% url 'users-admin' user_id=user.id %}">Edit</a> <a href="{% url 'users-destroy' user_id=user.id %}">Remove</a></td>
+                            <td><a href="{% url 'users-admin' user_id=user.id %}">Edit</a> <a href="{% url 'users-destroy' user_id=user.id %}">Remove</a> {% if user.user_level != 9 %}<a href="{% url 'users-set-admin' user_id=user.id %}">Make admin</a>{% endif %} {% if user.user_level == 9 %}<a href="{% url 'users-revoke-admin' user_id=user.id %}">Revoke admin</a>{% endif %}</td>
                             {% endif %}
                         </tr>
                     {% endfor %}
