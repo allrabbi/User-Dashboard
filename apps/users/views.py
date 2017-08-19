@@ -127,19 +127,12 @@ class UsersDestroy(View):
             print (type(e), e.message)
             return redirect(reverse('users-index'))
 
+#lets an admin set grant admin rights to another user
 class UsersSetAdmin(View):
     @method_decorator(admin_required)
     def get(self, request, user_id):
         try:
-            user = User.objects.get(id=user_id)
-            if user.user_level == 9:
-                flashMessages(request, ['This user is already an admin'], 'notification')
-                return redirect(reverse('dashboard-index'))
-            if user.user_level == 0:
-                user.user_level = 9
-                user.save()
-                flashMessages(request, ['Successfully made user an admin'], 'notification')
-                return redirect(reverse('dashboard-index'))
+            adminSetAdmin(request, user_id)
         except ObjectDoesNotExist as e:
             print (type(e), e.message)
-            return redirect(reverse('dashboard-index'))
+        return redirect(reverse('dashboard-index'))
