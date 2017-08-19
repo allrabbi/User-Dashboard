@@ -127,12 +127,22 @@ class UsersDestroy(View):
             print (type(e), e.message)
             return redirect(reverse('users-index'))
 
-#lets an admin set grant admin rights to another user
+#lets an admin grant admin rights to another user
 class UsersSetAdmin(View):
     @method_decorator(admin_required)
     def get(self, request, user_id):
         try:
             adminSetAdmin(request, user_id)
+        except ObjectDoesNotExist as e:
+            print (type(e), e.message)
+        return redirect(reverse('dashboard-index'))
+
+#lets an admin revoke admin rights from another user
+class UsersRevokeAdmin(View):
+    @method_decorator(admin_required)
+    def get(self, request, user_id):
+        try:
+            adminRevokeAdmin(request, user_id)
         except ObjectDoesNotExist as e:
             print (type(e), e.message)
         return redirect(reverse('dashboard-index'))

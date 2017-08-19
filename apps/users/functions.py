@@ -97,7 +97,7 @@ def adminUpdatePassword(request, user_id):
         User.objects.get(id=user_id).updatePassword(request.POST)
         flashMessages(request, ['Successfully updated user'], 'notification')
 
-#lets an admin set grant admin rights to another user. Exceptions are handled in Views
+#lets an admin grant admin rights to another user. Exceptions are handled in Views
 def adminSetAdmin(request, user_id):
     user = User.objects.get(id=user_id)
     if user.user_level == 9:
@@ -106,6 +106,16 @@ def adminSetAdmin(request, user_id):
         user.user_level = 9
         user.save()
         flashMessages(request, ['Successfully made {} {} an admin'.format(user.first_name, user.last_name)], 'notification')
+
+#lets an admin revoke admin rights from another user. Exceptions are handled in Views
+def adminRevokeAdmin(request, user_id):
+    user = User.objects.get(id=user_id)
+    if user.user_level == 0:
+        flashMessages(request, ['This user is not an admin'], 'notification')
+    elif user.user_level == 9:
+        user.user_level = 0
+        user.save()
+        flashMessages(request, ['Successfully revoked admin rights from {} {}'.format(user.first_name, user.last_name)], 'notification')
 
 #lets a user update their profile. Passes parameters to the validation method that specify what the validator should look for in the POST request
 def userUpdateProfile(request):
